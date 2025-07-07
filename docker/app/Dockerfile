@@ -19,8 +19,10 @@ RUN apt-get update && apt-get install -y \
     && add-apt-repository ppa:ondrej/php \
     && apt-get update \
     && apt-get install -y \
+    php8.2 \
     php8.2-fpm \
     php8.2-cli \
+    php8.2-common \
     php8.2-pgsql \
     php8.2-gd \
     php8.2-curl \
@@ -30,7 +32,8 @@ RUN apt-get update && apt-get install -y \
     php8.2-bcmath \
     nginx \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /run/php
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
