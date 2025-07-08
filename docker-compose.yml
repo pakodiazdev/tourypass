@@ -1,35 +1,54 @@
-version: '3.8'
-
 services:
   app:
     build:
-      context: ./docker/app
-      dockerfile: Dockerfile
-    container_name: tourypass-app
-    restart: unless-stopped
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME}
+    user: developer
     ports:
-      - "8080:80"
+      - "${APP_PORT}:80"
+      - "${XDEBUG_PORT}:9003"
+      - "${APP_HTTPS_PORT}:443"
+      - "${VITE_PORT}:${VITE_PORT}"
     volumes:
-      - ./app/api:/var/www/html
+      - .:/app
+      - api_vendor:/app/code/api/vendor
+      - api_node_modules:/app/code/api/node_modules
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
     networks:
       - tourypass
     depends_on:
       - db
+      - mailhog
 
   db:
     image: postgres:15-alpine
-    container_name: tourypass-db
-    restart: unless-stopped
+    container_name: ${COMPOSE_PROJECT_NAME}_db
     environment:
-      POSTGRES_DB: ${DB_DATABASE:-tourypass}
-      POSTGRES_USER: ${DB_USERNAME:-tourypass}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - dbdata:/var/lib/postgresql/data
     networks:
       - tourypass
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: ${COMPOSE_PROJECT_NAME}_mailhog
+    ports:
+      - "${MAILHOG_PORT}:8025"
+    networks:
+      - tourypass
 
 networks:
   tourypass:
@@ -37,3 +56,5 @@ networks:
 
 volumes:
   dbdata:
+  api_vendor:
+  api_node_modules:

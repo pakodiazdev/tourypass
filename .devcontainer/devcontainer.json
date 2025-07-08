@@ -1,0 +1,38 @@
+{
+    "name": "TouryPass Development",
+    "service": "app",
+    "workspaceFolder": "./",
+    "dockerComposeFile": "../docker-compose.yml",
+    "updateRemoteUserUID": true,
+    "shutdownAction": "stopCompose",
+    "remoteUser": "developer",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "onecentlin.laravel-extension-pack",
+                "ryannaddy.laravel-artisan",
+                "mikestead.dotenv",
+                "editorconfig.editorconfig",
+                "formulahendry.auto-rename-tag",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "pkief.material-icon-theme",
+                "DEVSENSE.phptools-vscode",
+                "eamodio.gitlens",
+                "codingyu.laravel-goto-view"
+            ],
+            "settings": {
+                "php.validate.enable": true,
+                "php.suggest.basic": true,
+                "[php]": {
+                    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+                },
+                "terminal.integrated.cwd": "/app/code"
+            },
+            "workbench.startupEditor": "readme"
+        }
+    },
+    "postAttachCommand": ""
+}
